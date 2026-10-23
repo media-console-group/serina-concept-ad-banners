@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<meta charset="UTF-8">
+<meta name="ad.size" content="width=300,height=600">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<meta name="viewport" content="width=300,initial-scale=1">
+<link rel="icon" href="data:,">
+<title>Serina Therapeutics, Inc. — Investor Relations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!--
+  Serina Therapeutics, Inc. — IR display banner, 300x600 — Concept D: Corporate site / brand-native.
+  Promotes: https://gracinting.github.io/serinatherapeutics-ir-concept/
+  Styled from the company's own CORPORATE website (https://www.serinatx.com/), not the IR concept page that
+  Concepts A-C are built from: its teal header and footer carrying the white logo, the lab-photo hero with a bold
+  uppercase title, the brown SER-252 card, the charcoal polymer band, the deep-teal stats band with pale-yellow
+  numerals, and its outlined, rounded buttons. "Homepage in miniature": each slide is one module of the corporate site:
+    1 homepage hero -> 2 "Introducing SER-252" card -> 3 "POZ Platform" charcoal band -> 4 stats band.
+  Photos and the polymer graphic are the site's own, saved locally (assets/); assets/logo.png is the site's own logo file.
+  Every claim comes from the project fact sheet (.tmp/facts.md), never from the site's evergreen copy (which is stale:
+  it still says clinical studies would begin in 2025, and uses "best-in-class", "eliminates peak / trough" and
+  population statistics that are not in the company's filings).
+  Written by .tmp/gen_d.py; style.css is hand-edited.
+-->
+
+<div id="banner" aria-label="Serina Therapeutics, Inc. investor relations advertisement">
+
+  <div id="slides">
+
+    <!-- Slide 1 — Overview -->
+    <section class="slide m-hero" data-index="0">
+      <!-- Module: corporate homepage hero (full-bleed lab video frame, bold uppercase white title, white copy).
+           Photo is a frame of the site's own hero video (a gloved hand reaching for a glass tube).
+           Facts: [10-K, Q2 release] POZ links existing drugs to a polymer designed for control of drug loading and
+           release; SER-252 investigational, Phase 1b in advanced Parkinson's disease; [Sep 9 release / 8-K] Cohort 1 =
+           8 patients at the lowest dose; the independent Safety Monitoring Committee recommended advancing to Cohort 2. -->
+      <img class="d-photo" src="assets/slide-1.jpg" alt="Photograph from serinatx.com: a gloved hand reaching toward a glass tube in a laboratory">
+      <span class="photo-cap">Illustrative image</span>
+      <div class="hero-copy">
+        <p class="hero-kicker">The company’s own headline (serinatx.com)</p>
+        <h2>Next-Generation Polymer Platform</h2>
+        <p class="hero-desc">A clinical-stage biotech with a polymer designed to control the loading and release of existing drugs.</p>
+        <div class="d-stats">
+          <div class="d-stat">
+            <p class="d-value">Phase 1b</p>
+            <p class="d-label">SER-252, advanced Parkinson’s disease. Investigational, not FDA-approved.</p>
+          </div>
+          <div class="d-stat">
+            <p class="d-value">8</p>
+            <p class="d-label">patients in Cohort 1, lowest dose. Sep&nbsp;9, 2026, per the company: an independent committee reviewed blinded safety data and recommended Cohort 2. Not proof SER-252 is safe or works.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 2 — SER-252 -->
+    <section class="slide m-card" data-index="1">
+      <!-- Module: corporate homepage "Introducing SER-252 (POZ-Apomorphine)": a rounded card on the site's brown band,
+           the site's own 3D molecule render beside a bold white title, the site's pipetting photo under its brown overlay,
+           pale-yellow arrow bullets.
+           Facts: [Sep 9 release] Cohort 1: 8 patients, lowest dose, randomized 3:1; SMC recommended advancing; data are
+           preliminary, blinded, exploratory and "may not be evidence of treatment effect"; topline from the single-ascending-dose
+           portion expected H1 2027. [Nov 3 2025 8-K, Jan 28 2026 8-K] clinical hold, then IND cleared (company announcement). -->
+      <div class="card">
+        <div class="card-head">
+          <img src="assets/molecule.png" alt="" width="74" height="83">
+          <h2>Introducing <span class="nw">SER-252</span> <span class="nw">(POZ-Apomorphine)</span></h2>
+        </div>
+        <p class="card-desc">Apomorphine attached to POZ, in a Phase 1b study (mainly safety, tolerability and drug levels) in advanced Parkinson’s disease. Investigational and not FDA-approved.</p>
+        <ul class="d-arrows">
+          <li>Cohort 1: eight patients, lowest dose, randomized 3:1 to SER-252 or placebo.</li>
+          <li>Sep&nbsp;9, 2026, per the company: an independent committee reviewed blinded safety data and recommended Cohort 2. Not proof SER-252 is safe or works.</li>
+          <li>Blinded, exploratory, preliminary: may not be evidence of treatment effect.</li>
+          <li>Company expects topline data from the single-dose part in H1&nbsp;2027; timing may change.</li>
+          <li>Company announced an FDA clinical hold (Nov&nbsp;3, 2025), then that FDA cleared the IND (Jan&nbsp;28, 2026).</li>
+        </ul>
+        <span class="photo-cap">Illustrative image</span>
+      </div>
+    </section>
+
+    <!-- Slide 3 — Platform -->
+    <section class="slide m-plat" data-index="2">
+      <!-- Module: corporate homepage "POZ Platform Delivers" charcoal band: bold white title, the site's own polymer and
+           drug-bead graphic (cropped clear of its marketing text), pale-yellow numerals beside bold white headings.
+           Facts: [10-K] PEG: n = 1 or 2 drug copies at the chain ends; POZ: n = 10 or higher along the side chains;
+           repeat dosing of POZ in rabbits did not generate anti-POZ antibodies; "We have not performed comparisons of
+           PEG-conjugated molecules versus POZ-conjugated molecules in humans" (in vitro and animal comparisons only). -->
+      <h2>The POZ Platform™</h2>
+      <p class="plat-sub">As the company describes it in its 10-K</p>
+      <figure class="plat-fig">
+        <img src="assets/slide-3.jpg" alt="Company illustration: a polymer chain carrying drug beads on side chains" width="170" height="171">
+        <figcaption>Company illustration, not to scale</figcaption>
+      </figure>
+      <div class="num-item">
+        <span class="num">1</span>
+        <div>
+          <h3>More drug per chain, the company says</h3>
+          <p>The 10-K counts 10 or more drug copies along a POZ chain’s side chains, against 1 or 2 at the ends of a PEG chain. Not SER-252’s measured loading.</p>
+        </div>
+      </div>
+      <div class="num-item">
+        <span class="num">2</span>
+        <div>
+          <h3>Antibodies to POZ: none seen in rabbits</h3>
+          <p>In repeat-dosing studies (10-K). PEG and POZ have not been compared in humans; the company’s comparisons are in vitro and in animals.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 4 — Financials -->
+    <section class="slide m-stats" data-index="3">
+      <!-- Module: corporate homepage "Redefining Treatment Paradigms" band: deep-teal band under a tinted lab photo, bold
+           white title, pale-yellow subheading, big pale-yellow numerals over white captions.
+           Facts: [10-Q Jun 30 2026] cash $23,024K (Dec 31, 2025: $3,056K); net loss six months $13,254K; shares outstanding
+           25,400,473 at Aug 10 (10,767K at Dec 31); net cash from financing $31,259K (stock and warrants); no product
+           revenue (grant revenue $0 in H1 2026); Note 1: cash not expected to cover twelve months, substantial doubt. -->
+      <div class="stats-head">
+        <h2>Financials, Unaudited</h2>
+        <p class="stats-sub">Six months to Jun 30, 2026 · 10-Q</p>
+      </div>
+      <div class="d-stats">
+        <div class="d-stat">
+          <p class="d-value">$23.0M</p>
+          <p class="d-label">Cash, up from $3.1M at Dec 31, 2025</p>
+        </div>
+        <div class="d-stat">
+          <p class="d-value">$31.3M</p>
+          <p class="d-label">Net cash raised selling stock and warrants</p>
+        </div>
+        <div class="d-stat">
+          <p class="d-value">$13.3M</p>
+          <p class="d-label">Net loss, six months. No product revenue</p>
+        </div>
+        <div class="d-stat">
+          <p class="d-value">25.4M</p>
+          <p class="d-label">Shares outstanding, Aug 10 (about 10.8M at Dec 31). Includes preferred conversion; excludes warrants</p>
+        </div>
+      </div>
+      <p class="gc-note">In its Aug 2026 10-Q the company said its cash is not expected to last twelve months from the filing, which raises substantial doubt about its ability to continue as a going concern.</p>
+      <p class="eq-note">Aug&nbsp;21, 2026: the company may sell up to $25.0M of new shares to Roth Principal Investments, at its option, at a discount to market price and subject to limits. Sales would dilute existing holders.</p>
+    </section>
+
+  </div>
+
+  <!-- Persistent chrome — the corporate site's teal header with the white logo, never rotates -->
+  <header id="top-bar" class="reveal" data-delay="0">
+    <img id="logo" src="assets/logo.png" alt="Serina Therapeutics" width="84" height="24">
+    <span id="ticker">NYSE&nbsp;American:&nbsp;SER</span>
+  </header>
+
+  <!-- Slider controls: round outlined buttons, as on the site's carousels -->
+  <button type="button" class="nav-arrow" id="arrow-prev" aria-label="Previous slide">
+    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 6 8l4 5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+  <button type="button" class="nav-arrow" id="arrow-next" aria-label="Next slide">
+    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3l4 5-4 5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+
+  <div id="bottom-fixed" class="reveal" data-delay="4">
+    <div id="dots" role="tablist" aria-label="Slide selector">
+      <button class="dot active" data-index="0" aria-label="Slide 1: Overview"></button>
+      <button class="dot" data-index="1" aria-label="Slide 2: SER-252"></button>
+      <button class="dot" data-index="2" aria-label="Slide 3: Platform"></button>
+      <button class="dot" data-index="3" aria-label="Slide 4: Financials"></button>
+    </div>
+
+    <!-- The site's outlined button, with its own ">>>" label style -->
+    <a href="#" id="cta">
+      <span>Investors &gt;&gt;&gt;</span>
+    </a>
+
+    <!-- A darker teal strip carrying the required forward-looking-statements line -->
+    <p id="fls"><span>SER-252 is investigational: safety and effectiveness are not established; not FDA-approved. <span class="nw">Forward-looking:</span> study timing and results, funding. Risks: <span class="nw">going-concern</span> doubt, no product revenue, dilution (equity line up to $25.0M, past <span class="nw">at-the-market</span> sales, warrants), control by large holders, NYSE American delisting risk. Financials: Jun 30, 2026 unless dated; unaudited. See SEC filings.</span></p>
+  </div>
+
+  <!-- Standard HTML5-ad click-tag plumbing -->
+  <div id="click-tag-wrapper"></div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

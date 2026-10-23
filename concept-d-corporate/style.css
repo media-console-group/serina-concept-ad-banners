@@ -1,0 +1,371 @@
+/* ── Concept D — Corporate site / brand-native ─────────────────────
+   The advertiser's own corporate website (serinatx.com), extended into a 300x600 ad. Every source token below was
+   read from that site's rendered styles and scaled to banner size: the footer / button teal #156082 (computed from
+   its footer band and its outlined buttons), the pale-yellow highlight #f6f298 (its button borders and "POZylation"
+   emphasis; the same marker hue the IR concept page uses), the stats band #1e4e68, the polymer band's own ground
+   #292a2e (the exact flat colour of the site's graphic), the brown band #67280c, Open Sans (700 / 800 headings),
+   outlined rounded buttons with white 3px borders on teal.
+   Each slide is one homepage module: .m-hero (lab-photo hero), .m-card (brown "Introducing SER-252" card),
+   .m-plat (charcoal polymer band), .m-stats (deep-teal band, pale-yellow numerals).
+   color-mix: Chrome 111+ / Safari 16.2+. ── */
+:root {
+  /* Source tokens — the corporate site */
+  --primary:    #156082;   /* header, footer, outlined buttons, dots */
+  --secondary:  #f6f298;   /* numerals, bullets, active-nav rule, subheads */
+  --band:       #1e4e68;   /* stats band */
+  --charcoal:   #292a2e;   /* polymer band (the graphic's own ground) */
+  --brown:      #67280c;   /* SER-252 card band */
+  --deep:       #082436;   /* shade over the hero photo */
+  --white:      #ffffff;
+  --on-dark:    #ffffff;
+  --on-dark-2:  rgba(255,255,255,0.9);
+  --btn-radius: 11px;
+
+  /* Type — the site's own Google Font (the link in index.html <head>) */
+  --font-head: 'Open Sans', system-ui, sans-serif;
+  --font-body: 'Open Sans', system-ui, sans-serif;
+  --ease:      cubic-bezier(0.16,1,0.3,1);
+
+  /* Geometry (fixed 300x600 stage) */
+  --gutter:    14px;
+  --hdr-h:     48px;
+  --bf-pad:    9px;
+  --ctrl-h:    22px;       /* dots + arrows row */
+  --bf-gap:    8px;        /* controls → CTA */
+  --cta-h:     36px;
+  --bf-gap-2:  9px;        /* CTA → footer strip */
+  --foot-h:    55px;       /* the disclosure strip: five lines at 7.2px */
+  --bf-h:      calc(var(--bf-pad) + var(--ctrl-h) + var(--bf-gap) + var(--cta-h) + var(--bf-gap-2) + var(--foot-h));
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { width:300px; height:600px; overflow:hidden; background:var(--primary); }
+body { font-family:var(--font-body); color:var(--white); -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
+a { text-decoration:none; color:inherit; }
+button { border:0; background:none; font:inherit; color:inherit; cursor:pointer; -webkit-tap-highlight-color:transparent; }
+ul { list-style:none; }
+.nw { white-space:nowrap; }
+.slide p, .slide li { text-wrap-style:pretty; }   /* no one-word last lines; style only, so white-space:nowrap on values still holds */
+
+/* ── Canvas ───────────────────────────────────────────────────────── */
+#banner {
+  position:relative;
+  width:300px;
+  height:600px;
+  overflow:hidden;
+  cursor:pointer;
+  background:var(--primary);
+}
+
+/* Each slide fills only the space between the header and the bottom block, so slide copy can never run under the chrome. */
+#slides { position:absolute; inset:0; z-index:1; }
+.slide {
+  position:absolute;
+  left:0; right:0;
+  top:var(--hdr-h);
+  bottom:var(--bf-h);
+  overflow:hidden;
+  opacity:0;
+  z-index:1;
+  pointer-events:none;
+  transition:opacity 0.9s ease;
+}
+.slide.active { opacity:1; z-index:2; pointer-events:auto; }
+
+/* Content rises in on each slide change */
+.slide > :not(.d-photo):not(.photo-cap) {
+  transform:translateY(10px);
+  transition:transform 0.9s var(--ease);
+}
+.slide.active > :not(.d-photo):not(.photo-cap) { transform:none; }
+
+/* ── Shared parts ─────────────────────────────────────────────────── */
+.d-photo {
+  position:absolute;
+  inset:0;
+  width:100%; height:100%;
+  object-fit:cover;
+  z-index:0;
+  user-select:none;
+  -webkit-user-drag:none;
+  animation:d-zoom 9s ease-out infinite alternate;
+}
+@keyframes d-zoom { from { transform:scale(1); } to { transform:scale(1.05); } }
+
+.photo-cap {
+  position:absolute;
+  right:8px; top:8px;
+  z-index:4;
+  padding:2px 6px;
+  border-radius:2px;
+  background:rgba(0,0,0,0.5);
+  font-size:7px;
+  line-height:1.2;
+  letter-spacing:0.02em;
+  color:var(--on-dark);
+}
+
+/* Stats: heading-font numerals in the pale yellow, white captions (the site's "Redefining Treatment Paradigms" band) */
+.d-stats { display:flex; }
+.d-value {
+  font-family:var(--font-head);
+  font-weight:700;
+  line-height:1.08;
+  color:var(--secondary);
+  white-space:nowrap;
+}
+.d-label { margin-top:3px; font-size:9px; line-height:1.38; color:var(--on-dark-2); }
+
+/* Pale-yellow arrow bullets: the site's arrow icon as a mask so it takes the token colour */
+.d-arrows { list-style:none; }
+.d-arrows li {
+  position:relative;
+  padding-left:15px;
+  margin-top:5px;
+  font-size:9.8px;
+  line-height:1.38;
+  color:var(--on-dark);
+}
+.d-arrows li::before {
+  content:'';
+  position:absolute;
+  left:0; top:2px;
+  width:10px; height:10px;
+  background:var(--secondary);
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 25'%3E%3Cpath d='M12 4.18066L10.585 5.59566L16.17 11.1807H4V13.1807H16.17L10.585 18.7657L12 20.1807L20 12.1807L12 4.18066Z'/%3E%3C/svg%3E") center / contain no-repeat;
+          mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 25'%3E%3Cpath d='M12 4.18066L10.585 5.59566L16.17 11.1807H4V13.1807H16.17L10.585 18.7657L12 20.1807L20 12.1807L12 4.18066Z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+/* ── Module: homepage hero (lab video frame, bold uppercase title) ──── */
+.m-hero { background:var(--deep); }
+.m-hero .d-photo {                 /* the site's hero frame as a wide picture, fading into the deep ground */
+  inset:0 0 auto 0;
+  height:231px;
+  object-position:50% 50%;
+  -webkit-mask-image:linear-gradient(to bottom, #000 0%, #000 60%, transparent 100%);
+          mask-image:linear-gradient(to bottom, #000 0%, #000 60%, transparent 100%);
+}
+.hero-copy {
+  position:absolute;
+  left:var(--gutter); right:var(--gutter);
+  bottom:13px;
+  z-index:2;
+}
+.hero-kicker { margin-bottom:4px; font-size:8.4px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--secondary); }
+.hero-copy h2 {
+  font-family:var(--font-head);
+  font-weight:800;
+  font-size:22px;
+  line-height:1.16;
+  letter-spacing:0.005em;
+  text-transform:uppercase;
+  color:var(--on-dark);
+  text-shadow:0 1px 6px rgba(0,0,0,0.45);
+}
+.hero-desc { margin-top:8px; font-size:10.6px; line-height:1.45; color:var(--on-dark); }
+.m-hero .d-stats { flex-direction:column; gap:8px; margin-top:12px; }
+.m-hero .d-stat { display:flex; gap:12px; align-items:flex-start; }
+.m-hero .d-value { flex:none; width:104px; font-size:22px; }
+.m-hero .d-label { flex:1; min-width:0; margin-top:3px; }
+
+/* ── Module: "Introducing SER-252" card on the brown band ───────────── */
+.m-card { background:var(--brown); padding:12px var(--gutter); }
+.card {
+  position:relative;
+  height:100%;
+  border-radius:10px;
+  overflow:hidden;
+  background:var(--brown) url(assets/slide-2.jpg) center / cover no-repeat;
+  box-shadow:0 2px 10px rgba(0,0,0,0.35);
+}
+.card::before {                    /* the site's brown overlay on the card photo */
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg, rgba(103,40,12,0.80), rgba(103,40,12,0.92));
+}
+.card > * { position:relative; }
+.card > .photo-cap { position:absolute; }
+.card-head { display:flex; align-items:center; gap:10px; padding:13px 14px 0; }
+.card-head img { display:block; width:66px; height:auto; flex:none; filter:drop-shadow(0 4px 8px rgba(0,0,0,0.35)); }
+.card-head h2 {
+  font-family:var(--font-head);
+  font-weight:700;
+  font-size:16px;
+  line-height:1.2;
+  color:var(--on-dark);
+}
+.card-desc { padding:9px 14px 0; font-size:10.4px; line-height:1.42; color:var(--on-dark); }
+.card .d-arrows { padding:8px 14px 0; }
+.card .d-arrows li { font-size:9.9px; line-height:1.36; margin-top:5px; }
+
+/* ── Module: charcoal polymer band ─────────────────────────────────── */
+.m-plat { background:var(--charcoal); padding:16px 18px 0; }
+.m-plat h2 { font-family:var(--font-head); font-weight:700; font-size:19px; line-height:1.2; color:var(--on-dark); }
+.plat-sub { margin-top:2px; font-size:9.6px; font-weight:600; color:var(--secondary); }
+.plat-fig { margin:8px auto 0; width:170px; }
+.plat-fig img { display:block; width:170px; height:auto; }
+.plat-fig figcaption { margin-top:1px; text-align:center; font-size:7px; color:rgba(255,255,255,0.62); }
+.num-item { display:flex; gap:10px; margin-top:11px; }
+.num { flex:none; width:14px; font-family:var(--font-head); font-weight:800; font-size:24px; line-height:1; color:var(--secondary); }
+.num-item h3 { font-family:var(--font-head); font-weight:700; font-size:11px; line-height:1.25; color:var(--on-dark); }
+.num-item p { margin-top:2px; font-size:9.6px; line-height:1.4; color:rgba(255,255,255,0.88); }
+
+/* ── Module: deep-teal stats band ───────────────────────────────────── */
+.m-stats { background:var(--band) url(assets/slide-4.jpg) center / cover no-repeat; padding:18px 18px 0; }
+.stats-head h2 { font-family:var(--font-head); font-weight:700; font-size:21px; line-height:1.2; color:var(--on-dark); }
+.stats-sub { margin-top:4px; font-size:10.4px; font-weight:600; color:var(--secondary); }
+.m-stats .d-stats { display:grid; grid-template-columns:1fr 1fr; gap:12px 12px; margin-top:14px; }
+.m-stats .d-value { font-size:28px; }
+.m-stats .d-label { font-size:9.4px; line-height:1.35; margin-top:4px; color:var(--on-dark); }
+.gc-note {
+  margin-top:13px;
+  padding:8px 10px;
+  border:1.5px solid rgba(246,242,152,0.8);
+  border-radius:8px;
+  background:rgba(8,36,54,0.35);
+  font-size:9.6px;
+  line-height:1.4;
+  color:var(--on-dark);
+}
+.eq-note { margin-top:9px; padding:0 2px; font-size:9px; line-height:1.4; color:var(--on-dark-2); }
+
+/* ── Persistent chrome (never rotates) ─────────────────────────────── */
+#top-bar {                         /* the site's footer teal, carrying the white logo */
+  position:absolute;
+  top:0; left:0; right:0;
+  height:var(--hdr-h);
+  z-index:6;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 var(--gutter);
+  background:var(--primary);
+  box-shadow:0 1px 5px rgba(0,0,0,0.28);
+}
+#logo { display:block; width:84px; height:24px; }
+#ticker {                          /* set as the active main-menu item */
+  position:relative;
+  padding-bottom:5px;
+  font-family:var(--font-head);
+  font-weight:600;
+  font-size:9.5px;
+  letter-spacing:0.02em;
+  color:var(--on-dark);
+}
+#ticker::after {
+  content:'';
+  position:absolute;
+  left:0; right:0; bottom:0;
+  height:2px;
+  background:var(--secondary);
+}
+
+#bottom-fixed {
+  position:absolute;
+  left:0; right:0; bottom:0;
+  height:var(--bf-h);
+  z-index:5;
+  padding-top:var(--bf-pad);
+  background:var(--primary);
+}
+
+/* Slider dots: white rings, filled when active */
+#dots {
+  display:flex;
+  align-items:center;
+  gap:2px;
+  height:var(--ctrl-h);
+  margin:0 0 var(--bf-gap) calc(var(--gutter) - 4px);
+}
+.dot { position:relative; width:18px; height:18px; }
+.dot::before {
+  content:'';
+  position:absolute;
+  inset:4px;
+  border:1.5px solid var(--on-dark);
+  border-radius:50%;
+  background-color:transparent;
+  transition:background-color .3s ease;
+}
+.dot.active::before { background-color:var(--on-dark); }
+
+.nav-arrow {                       /* round outlined control */
+  position:absolute;
+  z-index:6;
+  bottom:calc(var(--foot-h) + var(--bf-gap-2) + var(--cta-h) + var(--bf-gap));
+  width:var(--ctrl-h);
+  height:var(--ctrl-h);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1.5px solid var(--on-dark);
+  border-radius:50%;
+  color:var(--on-dark);
+  transition:background-color .2s ease, color .2s ease, transform .15s ease;
+}
+.nav-arrow svg { width:11px; height:11px; }
+.nav-arrow:hover { background:var(--on-dark); color:var(--primary); }
+.nav-arrow:active { transform:scale(0.9); }
+#arrow-next { right:var(--gutter); }
+#arrow-prev { right:calc(var(--gutter) + var(--ctrl-h) + 6px); }
+
+/* CTA — the site's outlined button: white border on the teal band, uppercase label with its ">>>" */
+#cta {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height:var(--cta-h);
+  margin:0 var(--gutter) var(--bf-gap-2);
+  border:2px solid var(--on-dark);
+  border-radius:var(--btn-radius);
+  background:transparent;
+  font-family:var(--font-head);
+  font-weight:700;
+  font-size:12px;
+  line-height:1;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:var(--on-dark);
+  transition:background-color .2s ease, color .2s ease;
+  animation:d-glow 2s ease-in-out 2.4s 4;
+}
+#banner:hover #cta, #cta:hover, #cta:focus-visible { background:var(--on-dark); color:var(--primary); }
+@keyframes d-glow { 0%, 100% { box-shadow:0 0 0 0 rgba(246,242,152,0); } 50% { box-shadow:0 0 0 4px rgba(246,242,152,0.28); } }
+
+/* Required disclosure — set in a darker teal strip. Four lines fit; it names what the slides forward-look about
+   and what is at risk, in the same words as Concepts A to C. */
+#fls {
+  height:var(--foot-h);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0 7px;
+  background:color-mix(in srgb, var(--primary) 70%, black);
+  font-size:7.2px;
+  font-weight:600;
+  line-height:9.2px;
+  text-align:center;
+  text-wrap:balance;
+  overflow:hidden;
+  color:var(--on-dark-2);
+}
+
+/* ── Entrance sequence (initial load only) ─────────────────────────── */
+.reveal {
+  opacity:0;
+  transform:translateY(8px);
+  transition:opacity .7s var(--ease), transform .7s var(--ease);
+}
+#top-bar.reveal { transform:translateY(-8px); }
+#banner.is-live .reveal { opacity:1; transform:none; }
+#top-bar[data-delay="0"] { transition-delay:.05s; }
+#bottom-fixed[data-delay="4"] { transition-delay:.45s; }
+
+#click-tag-wrapper { position:absolute; width:0; height:0; overflow:hidden; }
+
+@media (prefers-reduced-motion: reduce) {
+  .d-photo, #cta { animation:none; }
+  .reveal { transition-duration:.01s; transition-delay:0s !important; }
+  .slide, .slide > * { transition-duration:.2s; transition-delay:0s; }
+}

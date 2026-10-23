@@ -1,0 +1,340 @@
+/* ── Brand tokens — the ONLY place colors are defined. Taken from the IR concept page's :root
+   (oklch converted to hex): --deep #082436, --deep-2 #021320, --accent #68c2fc (the bright accent it uses on dark),
+   --accent-lt #a2d9ff (its primary button on dark), --marker #f6f298 (its one highlight hue, "used on dark bands only").
+   The rest derive from them (color-mix: Chrome 111+ / Safari 16.2+). ── */
+:root {
+  --dark:      #021320;
+  --dark-2:    color-mix(in srgb, var(--dark) 70%, black);
+  --navy:      #082436;
+  --accent:    #68c2fc;
+  --accent-d:  color-mix(in srgb, var(--accent) 82%, black);
+  --accent-lt: #a2d9ff;
+  --gold:      #f6f298;
+  --gold-d:    #c8c35c;
+  --white:     #ffffff;
+  --cta-ink:   var(--navy);   /* the IR page's .btn-primary-light: deep navy on the pale-blue fill */
+  --font-head: 'Jost', system-ui, sans-serif;            /* the IR page's display face (300 / 500) */
+  --font:      'Open Sans', system-ui, sans-serif;       /* its body face */
+  --mono:      'Sometype Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+  --ease:      cubic-bezier(0.16,1,0.3,1);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { width:300px; height:600px; overflow:hidden; background:var(--dark); }
+body { font-family:var(--font); -webkit-font-smoothing:antialiased; }
+a { text-decoration:none; color:inherit; }
+button { border:0; background:none; font:inherit; color:inherit; cursor:pointer; -webkit-tap-highlight-color:transparent; }
+.nw { white-space:nowrap; }   /* keeps hyphenated compounds on one line */
+
+/* ── Canvas ─────────────────────────────────────────────────────────
+   Fixed 300x600 stage. A crossfading slide stack sits at the bottom of
+   the z-order; persistent chrome (logo, dots, CTA, disclosure) is pinned
+   on top of it and never rotates. */
+#banner {
+  position:relative;
+  width:300px;
+  height:600px;
+  overflow:hidden;
+  cursor:pointer;
+  background:var(--dark);
+}
+
+/* ── Slide stack ────────────────────────────────────────────────── */
+#slides { position:absolute; inset:0; z-index:1; }
+
+.slide {
+  position:absolute;
+  inset:0;
+  opacity:0;
+  z-index:1;
+  pointer-events:none;
+  transition:opacity 0.9s ease;
+}
+.slide.active { opacity:1; z-index:2; pointer-events:auto; }
+
+.slide-bg {
+  position:absolute;
+  top:0; left:0;
+  width:100%; height:100%;
+  z-index:1;
+  user-select:none;
+  -webkit-user-drag:none;
+}
+
+.slide-scrim-top, .slide-scrim-bottom {
+  position:absolute;
+  left:0; right:0;
+  z-index:2;
+  pointer-events:none;
+}
+.slide-scrim-top {
+  top:0; height:58px;   /* the art starts under the header, so the scrim only has to seat the logo */
+  background:linear-gradient(180deg, color-mix(in srgb, var(--dark-2) 88%, transparent) 0%, color-mix(in srgb, var(--dark-2) 0%, transparent) 100%);
+}
+.slide-scrim-bottom {
+  bottom:0; height:352px;
+  background:linear-gradient(0deg, var(--dark) 0%, color-mix(in srgb, var(--dark) 94%, transparent) 46%, color-mix(in srgb, var(--dark) 0%, transparent) 100%);
+}
+
+.slide-copy {
+  position:absolute;
+  inset:0;
+  z-index:3;
+  transform:translateY(12px);
+  transition:transform 0.9s var(--ease);
+}
+.slide.active .slide-copy { transform:translateY(0); }
+
+/* Floating mid-image stat chip (per slide) */
+.mid-chip {
+  position:absolute;
+  top:262px; left:18px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:8px 13px 8px 11px;
+  background:color-mix(in srgb, var(--dark) 62%, transparent);
+  border-left:3px solid var(--accent);
+  border-radius:0 3px 3px 0;
+  backdrop-filter:blur(3px);
+  -webkit-backdrop-filter:blur(3px);
+}
+.chip-num {
+  font-family:var(--font-head);
+  font-weight:500;
+  font-size:21px;
+  letter-spacing:-0.01em;
+  color:var(--white);
+  white-space:nowrap;
+}
+.chip-num em { font-style:normal; font-weight:500; color:var(--gold); }
+.chip-label {
+  font-family:var(--font);
+  font-size:8.4px;
+  line-height:1.3;
+  font-weight:600;
+  color:rgba(255,255,255,0.86);
+}
+
+/* Rotating headline block, pinned above the fixed bottom block */
+.copy-bottom {
+  position:absolute;
+  left:0; right:0;
+  bottom:158px;   /* the five-line disclosure makes the bottom block taller than the template's; the persistent stat row is gone */
+  padding:0 18px;
+}
+.kicker {
+  font-family:var(--mono);
+  font-weight:500;
+  font-size:7.8px;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--accent-lt);
+  margin-bottom:6px;
+}
+.copy-bottom h1 {
+  font-family:var(--font-head);
+  font-weight:300;
+  font-size:24px;
+  line-height:1.06;
+  letter-spacing:-0.025em;
+  color:var(--white);
+}
+.copy-bottom h1 em { font-style:normal; font-weight:500; color:var(--gold); }
+.copy-bottom p {
+  margin-top:8px;
+  font-size:10.6px;
+  line-height:1.42;
+  color:rgba(255,255,255,0.86);
+  max-width:264px;
+}
+
+/* ── Persistent chrome (never rotates) ─────────────────────────── */
+#top-bar {
+  position:absolute;
+  top:0; left:0; right:0;
+  z-index:5;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px 18px 0;
+}
+/* the company's own lockup (white, from serinatx.com), shipped at 2x */
+#logo { display:block; width:100px; height:28px; flex:none; }
+#eyebrow {
+  font-family:var(--mono);
+  font-weight:500;
+  font-size:7.6px;
+  line-height:1.55;
+  letter-spacing:0.1em;
+  text-align:right;
+  color:var(--accent-lt);
+}
+
+#bottom-fixed {
+  position:absolute;
+  left:0; right:0; bottom:0;
+  z-index:5;
+  padding:0 18px 12px;
+}
+
+#dots {
+  display:flex;
+  gap:6px;
+  margin-bottom:9px;
+}
+.dot {
+  width:14px; height:3px;
+  border-radius:2px;
+  background:rgba(255,255,255,0.28);
+  transition:background .3s ease, width .3s ease;
+  padding:6px 0;
+  background-clip:content-box;
+  box-sizing:content-box;
+}
+.dot.active { background-color:var(--gold); width:20px; }  /* background-color, not the shorthand: the shorthand resets background-clip and paints the whole 15px hit area as a square */
+
+/* the arrows sit on the dots row, so the art above is clear of them */
+.nav-arrow {
+  position:absolute;
+  top:-5px;
+  width:24px; height:24px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:color-mix(in srgb, var(--dark) 45%, transparent);
+  border:1px solid rgba(255,255,255,0.22);
+  border-radius:50%;
+  color:rgba(255,255,255,0.9);
+  transition:background .2s ease, transform .15s ease;
+}
+.nav-arrow svg { width:12px; height:12px; }
+.nav-arrow:active { transform:scale(0.9); background:color-mix(in srgb, var(--accent) 55%, transparent); }
+#arrow-prev { right:48px; }
+#arrow-next { right:18px; }
+
+#cta {
+  margin-top:11px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  width:100%;
+  height:40px;
+  background:var(--accent-lt);
+  border-radius:6px;
+  color:var(--cta-ink);
+  font-family:var(--font);
+  font-weight:700;
+  font-size:12px;
+  letter-spacing:0.01em;
+  box-shadow:0 8px 20px color-mix(in srgb, var(--accent) 30%, transparent);
+  animation:cta-pulse 1.8s ease-in-out 2.6s 6;
+}
+#cta-arrow { width:13px; height:13px; }
+
+/* Required disclosure under the CTA: it names what is forward-looking and what is at risk, so it runs to five lines.
+   Set in the body face at 7.6px and near-full strength (a 6.6px mono line would not be readable). */
+#disclosure {
+  margin-top:8px;
+  font-family:var(--font);
+  font-weight:600;
+  font-size:7.6px;
+  letter-spacing:0;
+  line-height:1.3;
+  text-align:center;
+  text-wrap:balance;
+  color:rgba(255,255,255,0.9);
+}
+@keyframes cta-pulse {
+  0%, 100% { box-shadow:0 8px 20px color-mix(in srgb, var(--accent) 30%, transparent); }
+  50%      { box-shadow:0 8px 26px color-mix(in srgb, var(--accent) 60%, transparent), 0 0 0 5px color-mix(in srgb, var(--accent) 14%, transparent); }
+}
+
+/* ── Entrance sequence (initial load only) ─────────────────────── */
+.reveal {
+  opacity:0;
+  transform:translateY(14px);
+  transition:opacity .7s var(--ease), transform .7s var(--ease);
+}
+#banner.is-live .reveal { opacity:1; transform:none; }
+#top-bar[data-delay="0"] { transition-delay:.05s; }
+#bottom-fixed[data-delay="4"] { transition-delay:.55s; }
+
+#click-tag-wrapper { position:absolute; width:0; height:0; overflow:hidden; }
+
+@media (prefers-reduced-motion: reduce) {
+  #cta { animation:none; }
+  .m-trace { transition:none; stroke-dashoffset:0; }
+  .reveal { transition-duration:.01s; transition-delay:0s !important; }
+  .slide, .slide-copy { transition-duration:.2s; }
+}
+
+/* ── Motif / Dark ───────────────────────────────────────────────────
+   The IR concept page has no photography of the company's own, so each slide's background is that page's own
+   graphic language redrawn at banner scale (.tmp/motif.py, geometry read from the page's SVG): the polymer chain
+   and release window, the study's cohort dots, PEG against POZ, and the sources-and-uses bars. The ground is the
+   page's hero stock: negative ruling, two brand-hue fields, a deep gradient, and the logomark's starburst. */
+.slide-bg.motif {
+  animation:none;
+  background-color:var(--navy);
+  background-image:
+    linear-gradient(to bottom, rgba(255,255,255,.05) 0, rgba(255,255,255,.05) 1px, transparent 1px),
+    radial-gradient(66% 34% at 100% 0%, oklch(0.42 0.085 239.3 / .36), transparent 70%),
+    radial-gradient(72% 30% at 0% 46%, oklch(0.34 0.06 239.3 / .5), transparent 70%),
+    linear-gradient(to bottom, oklch(0.30 0.05 239.3) 0, var(--navy) 330px, var(--dark) 100%);
+  background-size:100% 22px, auto, auto, auto;
+  overflow:hidden;
+}
+.slide-bg.motif::before {   /* the logomark's 44-ray starburst, as on the IR hero (right and top bleed off the edge) */
+  content:'';
+  position:absolute;
+  right:-138px; top:-128px;
+  width:316px; height:316px;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-160 -160 320 320'%3E%3Cpath fill='%23a1cae7' d='M-2.3 -64.0 L2.3 -64.0 L5.4 -150.0 L-5.4 -150.0ZM6.9 -63.7 L11.4 -63.0 L26.7 -147.7 L16.0 -149.2ZM15.9 -62.0 L20.3 -60.7 L47.5 -142.4 L37.2 -145.4ZM24.6 -59.1 L28.7 -57.2 L67.4 -134.1 L57.5 -138.6ZM32.7 -55.0 L36.6 -52.6 L85.8 -123.2 L76.7 -129.0ZM40.3 -49.8 L43.7 -46.8 L102.5 -109.7 L94.3 -116.7ZM46.9 -43.6 L50.0 -40.1 L117.1 -93.9 L110.0 -102.1ZM52.7 -36.4 L55.2 -32.5 L129.3 -76.3 L123.5 -85.4ZM57.3 -28.5 L59.2 -24.3 L138.8 -57.0 L134.4 -66.9ZM60.8 -20.1 L62.1 -15.6 L145.6 -36.7 L142.5 -47.0ZM63.1 -11.2 L63.7 -6.6 L149.3 -15.5 L147.8 -26.2ZM64.0 -2.1 L64.0 2.5 L150.0 5.9 L150.0 -4.9ZM63.6 7.1 L63.0 11.6 L147.6 27.3 L149.2 16.6ZM62.0 16.1 L60.7 20.5 L142.2 48.0 L145.3 37.7ZM59.1 24.8 L57.1 28.9 L133.9 67.8 L138.4 58.0ZM54.9 32.9 L52.4 36.8 L122.9 86.2 L128.7 77.2ZM49.7 40.4 L46.6 43.9 L109.3 102.9 L116.4 94.7ZM43.4 47.1 L39.9 50.1 L93.5 117.4 L101.7 110.4ZM36.2 52.8 L32.4 55.3 L75.8 129.5 L84.9 123.8ZM28.3 57.4 L24.1 59.3 L56.6 139.0 L66.4 134.6ZM19.9 60.9 L15.4 62.2 L36.2 145.7 L46.5 142.7ZM11.0 63.1 L6.4 63.7 L15.0 149.3 L25.7 147.9ZM1.9 64.0 L-2.7 64.0 L-6.4 150.0 L4.4 150.0ZM-7.3 63.6 L-11.8 62.9 L-27.8 147.5 L-17.1 149.1ZM-16.3 61.9 L-20.7 60.6 L-48.5 142.0 L-38.2 145.2ZM-25.0 59.0 L-29.1 57.0 L-68.3 133.7 L-58.5 138.2ZM-33.1 54.8 L-37.0 52.3 L-86.7 122.6 L-77.6 128.5ZM-40.6 49.5 L-44.0 46.5 L-103.2 108.9 L-95.1 116.1ZM-47.2 43.2 L-50.2 39.7 L-117.7 93.1 L-110.7 101.3ZM-52.9 36.1 L-55.4 32.2 L-129.8 75.4 L-124.1 84.5ZM-57.5 28.1 L-59.4 23.9 L-139.2 56.1 L-134.8 65.9ZM-61.0 19.6 L-62.2 15.2 L-145.8 35.6 L-142.9 46.0ZM-63.1 10.7 L-63.7 6.2 L-149.4 14.5 L-148.0 25.2ZM-64.0 1.6 L-64.0 -3.0 L-149.9 -7.0 L-150.0 3.8ZM-63.6 -7.5 L-62.9 -12.1 L-147.4 -28.3 L-149.1 -17.6ZM-61.9 -16.5 L-60.5 -20.9 L-141.9 -49.0 L-145.0 -38.7ZM-58.9 -25.2 L-56.9 -29.3 L-133.4 -68.8 L-138.0 -59.0ZM-54.7 -33.3 L-52.2 -37.2 L-122.3 -87.1 L-128.2 -78.1ZM-49.4 -40.8 L-46.3 -44.2 L-108.6 -103.6 L-115.8 -95.6ZM-43.1 -47.4 L-39.6 -50.4 L-92.7 -118.1 L-100.9 -111.1ZM-35.9 -53.1 L-32.0 -55.5 L-74.9 -130.1 L-84.1 -124.3ZM-27.9 -57.6 L-23.7 -59.5 L-55.6 -139.4 L-65.5 -135.1ZM-19.4 -61.0 L-15.0 -62.3 L-35.1 -145.9 L-45.5 -143.0ZM-10.5 -63.2 L-6.0 -63.8 L-14.0 -149.4 L-24.7 -148.1Z'/%3E%3C/svg%3E") center / contain no-repeat;
+  opacity:.08;
+}
+.motif svg { position:absolute; left:0; top:0; width:300px; height:600px; overflow:hidden; }
+
+/* polymer chain, drug beads, release window (v1) */
+.m-bb { fill:none; stroke:var(--accent-lt); stroke-width:1.4; stroke-linecap:round; stroke-linejoin:round; }
+.m-unit { fill:var(--accent-lt); opacity:.55; }
+.m-arm { stroke:var(--accent-lt); stroke-width:1; opacity:.8; }
+.m-node { fill:var(--accent-lt); }
+.m-bead { fill:var(--gold); }
+.m-win { fill:rgba(255,255,255,.08); stroke:rgba(255,255,255,.35); stroke-width:1; stroke-dasharray:2 4; }
+.m-axis { fill:none; stroke:rgba(255,255,255,.5); stroke-width:1; }
+.m-ghost { fill:none; stroke:rgba(255,255,255,.62); stroke-width:1.2; stroke-dasharray:2 4; stroke-linecap:round; }
+.m-trace { fill:none; stroke:var(--gold); stroke-width:2.4; stroke-linecap:round; stroke-dasharray:1; stroke-dashoffset:1;
+           transition:stroke-dashoffset 2.4s var(--ease) .5s; }
+.slide.active .m-trace { stroke-dashoffset:0; }
+.m-trace.on { stroke-dasharray:none; stroke-dashoffset:0; transition:none; }
+
+/* cohort dots (v2): filled = enrolled, gold ring = next, dashed ring = planned */
+.m-c.done { fill:var(--accent-lt); }
+.m-c.next { fill:none; stroke:var(--gold); stroke-width:1.3; }
+.m-c.plan { fill:none; stroke:rgba(255,255,255,.5); stroke-width:1; stroke-dasharray:1.5 1.5; }
+.m-div { stroke:rgba(255,255,255,.2); stroke-width:1; }
+
+/* PEG against POZ (v3) */
+.m-chain { stroke:var(--accent-lt); stroke-width:1.7; stroke-linecap:round; }
+
+/* sources and uses (v4): bars drawn to the 10-Q values */
+.s-open { fill:var(--accent-lt); fill-opacity:.38; }
+.s-pp   { fill:var(--accent); }
+.s-atm  { fill:var(--accent-lt); }
+.s-ops  { fill:#fff; fill-opacity:.3; }
+.s-cash { fill:var(--gold); }
+.m-gc { fill:rgba(246,242,152,.07); stroke:var(--gold); stroke-opacity:.7; stroke-width:1; }
+
+/* SVG labels: kept in the band above the stat chip (art ends at y 250) */
+.motif text { font-family:var(--mono); fill:var(--accent-lt); }
+.motif .m-title { font-size:6.8px; font-weight:500; letter-spacing:.08em; fill-opacity:.86; }
+.motif .m-title.on { fill-opacity:1; }
+.motif .m-title.nx { fill:var(--gold); fill-opacity:1; }
+.motif .m-title.halo { paint-order:stroke; stroke:var(--navy); stroke-width:2.6px; stroke-linejoin:round; }
+.motif .m-tag { font-size:8px; font-weight:700; letter-spacing:.16em; fill:var(--gold); }
+.motif .m-lab { font-family:var(--font); font-size:7.8px; font-weight:600; letter-spacing:.005em; fill:#fff; fill-opacity:.92; }
+.motif .m-lab.gc { fill:var(--gold); fill-opacity:1; font-weight:700; }
+.motif .m-bv { font-family:var(--mono); font-size:6.8px; font-weight:600; letter-spacing:.02em; fill:var(--navy); }
+.motif .m-bv.lt { fill:#fff; }
